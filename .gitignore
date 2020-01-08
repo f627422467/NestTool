@@ -1,0 +1,12 @@
+/target/classes/META-INF/*.kotlin_module
+/target/classes/clipper/*.class
+/target/classes/com/aries/util/nest/*.class
+/target/classes/com/aries/util/nest/algorithm/*.class
+/target/classes/com/aries/util/nest/data/*.class
+/target/classes/com/aries/util/nest/util/*.class
+/target/classes/com/aries/util/nest/util/coor/*.class
+/target/test-classes/META-INF/*.kotlin_module
+/target/test-classes/com/aries/util/nest/*.class
+/target/test-classes/com/aries/util/nest/algorithm/*.class
+/target/test-classes/com/aries/util/nest/data/*.class
+/target/test-classes/com/aries/util/nest/util/*.class
