@@ -181,12 +181,13 @@ public class Placement {
 
 与Inkscape集成，适用Inkscape内置命令，将生成的优化图转为GCode，用于设备加工。
 
-CMD:
+```java
     --file=xxx --verb EditSelectAll --verb SelectionOffset 
     --verb ru.cnc-club.filter.gcodetools_orientation_no_options_no_preferencecs.noprefs
     --verb ru.cnc-club.filter.gcodetools_tools_library_no_options_no_preferencecs.noprefs
     --verb ru.cnc-club.filter.gcodetools_ptg.noprefs
     --verb=FileSave --verb=FileQuit
+```
 
 
 ### 参考
