@@ -10,3 +10,4 @@
 /target/test-classes/com/aries/util/nest/algorithm/*.class
 /target/test-classes/com/aries/util/nest/data/*.class
 /target/test-classes/com/aries/util/nest/util/*.class
+/.idea/
