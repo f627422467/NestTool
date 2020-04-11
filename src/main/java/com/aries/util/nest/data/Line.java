@@ -1,19 +1,15 @@
 package com.aries.util.nest.data;
 
-import com.aries.util.nest.util.UtilNumber;
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
+public class Line {
 
-/**
- * 点
- */
-public class Point {
+    private Point startPoint;
 
-    private BigDecimal x;
-    private BigDecimal y;
+    private Point endPoint;
 
+    private boolean isArc = false;
+    //弧线属性
     private BigDecimal rx;
     private BigDecimal ry;
     private BigDecimal x_axis_rotation;
@@ -22,20 +18,43 @@ public class Point {
     //是否向着图形所在的区域凹陷
     private boolean isArcInwards = false;
 
-    public BigDecimal getX() {
-        return x;
+    //一般式的参数
+    private BigDecimal a;
+
+    private BigDecimal b;
+
+    private BigDecimal c;
+
+    public Point getStartPoint() {
+        return startPoint;
     }
 
-    public void setX(BigDecimal x) {
-        this.x = x;
+    public void setStartPoint(Point startPoint) {
+        this.startPoint = startPoint;
     }
 
-    public BigDecimal getY() {
-        return y;
+    public Point getEndPoint() {
+        return endPoint;
     }
 
-    public void setY(BigDecimal y) {
-        this.y = y;
+    public void setEndPoint(Point endPoint) {
+        this.endPoint = endPoint;
+    }
+
+    public boolean getIsArc() {
+        return isArc;
+    }
+
+    public void setIsArc(boolean isArc) {
+        this.isArc = isArc;
+    }
+
+    public boolean getIsArcInwards() {
+        return isArcInwards;
+    }
+
+    public void setIsArcInwards(boolean isArcInwards) {
+        this.isArcInwards = isArcInwards;
     }
 
     public BigDecimal getRx() {
@@ -78,30 +97,28 @@ public class Point {
         this.sweep_flag = sweep_flag;
     }
 
-    public boolean getIsArcInwards() {
-        return isArcInwards;
+    public BigDecimal getA() {
+        return a;
     }
 
-    public void setIsArcInwards(boolean isArcInwards) {
-        this.isArcInwards = isArcInwards;
+    public void setA(BigDecimal a) {
+        this.a = a;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(this == obj)
-            return true;
-        if(obj == null)
-            return false;
-        if(getClass() != obj.getClass())
-            return false;
-        Point other = (Point)obj;
-        if(!UtilNumber.equals(this.x, other.getX()) || !UtilNumber.equals(this.y, other.getY()))
-            return false;
-        return true;
+    public BigDecimal getB() {
+        return b;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
+    public void setB(BigDecimal b) {
+        this.b = b;
     }
+
+    public BigDecimal getC() {
+        return c;
+    }
+
+    public void setC(BigDecimal c) {
+        this.c = c;
+    }
+
 }

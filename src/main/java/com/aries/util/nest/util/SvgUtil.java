@@ -1,6 +1,7 @@
 package com.aries.util.nest.util;
 
 import com.aries.util.nest.data.*;
+import org.dom4j.Element;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -697,5 +698,33 @@ public class SvgUtil {
     public static String setPointStr(BigDecimal x,BigDecimal y){
         return String.format("%s,%s ",x.stripTrailingZeros(),y.stripTrailingZeros());
 //        return String.format("L %s %s ",x,y);
+    }
+
+    /**
+     * 在子集中按ID查找节点
+     *
+     * @param parentElement
+     * @param id
+     * @return
+     */
+    public static Element findObjectByID(Element parentElement, String id) {
+        List<Element> listElements = parentElement.elements();
+        if (UtilMisc.isEmpty(listElements)) {
+            return null;
+        }
+        Element object = null;
+        for (Element element : listElements) {
+            if (!element.attributes().isEmpty() && UtilMisc.isNotNull(element.attribute("id"))) {
+                if (element.attribute("id").getValue().equals(id)) {
+                    object = element;
+                    break;
+                }
+            }
+            object = findObjectByID(element, id);
+            if (UtilMisc.isNotNull(object)) {
+                break;
+            }
+        }
+        return object;
     }
 }

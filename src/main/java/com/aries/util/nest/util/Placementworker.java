@@ -1,5 +1,6 @@
 package com.aries.util.nest.util;
 
+import clipper.Point;
 import com.aries.util.nest.data.*;
 import com.aries.util.nest.util.coor.ClipperCoor;
 import com.google.gson.Gson;

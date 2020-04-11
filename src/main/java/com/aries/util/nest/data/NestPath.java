@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author aries
  */
-public class NestPath  implements Comparable<NestPath>{
+public class NestPath implements Comparable<NestPath> {
     private List<Segment> segments;
     private List<NestPath> children;
     private NestPath parent;
@@ -18,34 +18,45 @@ public class NestPath  implements Comparable<NestPath>{
     public double offsetY;
 
     private int id;
-    private int source ;
+    private int source;
     private int rotation;
-    public Config config ;
-    public double area ;
+    public Config config;
+    public double area;
 
     public int bid;
 
+    //后加属性
+    //是否是内嵌
+    private boolean isInline = false;
 
-    public void add(double x , double y ){
-        this.add(new Segment(x,y));
+    private boolean isIncludeArc = false;
+
+
+    public void add(double x, double y) {
+        this.add(new Segment(x, y));
+    }
+
+    public void addTrue(double x, double y) {
+//        this.add(new Segment(new BigDecimal(x),new BigDecimal(y)));
+        this.add(new Segment(x, y));
     }
 
     @Override
     public boolean equals(Object obj) {
         NestPath nestPath = (NestPath) obj;
-        if(segments.size() != nestPath.size()){
+        if (segments.size() != nestPath.size()) {
             return false;
         }
-        for(int  i =0 ; i <segments.size(); i ++){
-            if(!segments.get(i).equals(nestPath.get(i))){
+        for (int i = 0; i < segments.size(); i++) {
+            if (!segments.get(i).equals(nestPath.get(i))) {
                 return false;
             }
         }
-        if(children.size() != nestPath.getChildren().size()){
+        if (children.size() != nestPath.getChildren().size()) {
             return false;
         }
-        for(int i = 0 ; i<children.size(); i ++){
-            if(!children.get(i).equals(nestPath.getChildren().get(i))){
+        for (int i = 0; i < children.size(); i++) {
+            if (!children.get(i).equals(nestPath.getChildren().get(i))) {
                 return false;
             }
         }
@@ -63,22 +74,22 @@ public class NestPath  implements Comparable<NestPath>{
     /**
      * 丢弃最后一个segment
      */
-    public void pop(){
-        segments.remove(segments.size()-1);
+    public void pop() {
+        segments.remove(segments.size() - 1);
     }
 
-    public void reverse(){
+    public void reverse() {
         List<Segment> rever = new ArrayList<Segment>();
-        for(int i = segments.size()-1; i >=0; i -- ){
+        for (int i = segments.size() - 1; i >= 0; i--) {
             rever.add(segments.get(i));
         }
         segments.clear();
-        for(Segment s : rever ){
+        for (Segment s : rever) {
             segments.add(s);
         }
     }
 
-    public Segment get(int i){
+    public Segment get(int i) {
         return segments.get(i);
     }
 
@@ -90,7 +101,7 @@ public class NestPath  implements Comparable<NestPath>{
         this.parent = parent;
     }
 
-    public void addChildren(NestPath nestPath){
+    public void addChildren(NestPath nestPath) {
         children.add(nestPath);
         nestPath.setParent(this);
     }
@@ -98,16 +109,16 @@ public class NestPath  implements Comparable<NestPath>{
     @Override
     public String toString() {
         String res = "";
-        res += "id = "+ id+" , source = "+ source +" , rotation = "+rotation +"\n";
+        res += "id = " + id + " , source = " + source + " , rotation = " + rotation + "\n";
         int count = 0;
-        for(Segment s :segments){
-            res += "Segment " + count +"\n";
+        for (Segment s : segments) {
+            res += "Segment " + count + "\n";
             count++;
-            res+= s.toString() +"\n";
+            res += s.toString() + "\n";
         }
-        count = 0 ;
-        for(NestPath nestPath: children){
-            res += "children "+ count +"\n";
+        count = 0;
+        for (NestPath nestPath : children) {
+            res += "children " + count + "\n";
             count++;
             res += nestPath.toString();
         }
@@ -142,7 +153,7 @@ public class NestPath  implements Comparable<NestPath>{
         this.source = source;
     }
 
-    public NestPath(){
+    public NestPath() {
         offsetX = 0;
         offsetY = 0;
         children = new ArrayList<NestPath>();
@@ -161,13 +172,13 @@ public class NestPath  implements Comparable<NestPath>{
         this.config = config;
     }
 
-    public NestPath(NestPath srcNestPath){
+    public NestPath(NestPath srcNestPath) {
         segments = new ArrayList<Segment>();
-        for(Segment segment : srcNestPath.getSegments() ){
+        for (Segment segment : srcNestPath.getSegments()) {
             segments.add(new Segment(segment));
         }
 
-        this.id  = srcNestPath.id;
+        this.id = srcNestPath.id;
         this.rotation = srcNestPath.rotation;
         this.source = srcNestPath.source;
         this.offsetX = srcNestPath.offsetX;
@@ -176,35 +187,37 @@ public class NestPath  implements Comparable<NestPath>{
         this.area = srcNestPath.area;
         children = new ArrayList<NestPath>();
 
-        for(NestPath nestPath: srcNestPath.getChildren()){
+        for (NestPath nestPath : srcNestPath.getChildren()) {
             NestPath child = new NestPath(nestPath);
             child.setParent(this);
             children.add(child);
         }
     }
 
-    public static NestPath cleanNestPath(NestPath srcPath){
+    public static NestPath cleanNestPath(NestPath srcPath) {
         /**
          * Convert NestPath 2 Clipper
          */
         Path path = CommonUtil.NestPath2Path(srcPath);
 
         Paths simple = DefaultClipper.simplifyPolygon(path, Clipper.PolyFillType.NON_ZERO);
-        if(simple.size() == 0 ){
+        if (simple.size() == 0) {
+            //"请检查优化图中，是否有两两重合的边！"
             return null;
         }
         Path biggest = simple.get(0);
         double biggestArea = Math.abs(biggest.area());
-        for(int i = 0; i <simple.size();i++){
+        for (int i = 0; i < simple.size(); i++) {
             double area = Math.abs(simple.get(i).area());
-            if(area > biggestArea ){
+            if (area > biggestArea) {
                 biggest = simple.get(i);
                 biggestArea = area;
             }
         }
         Path clean = biggest.cleanPolygon(srcPath.config.CURVE_TOLERANCE * Config.CLIIPER_SCALE);
-        if(clean.size() == 0 ){
-            return null ;
+        if (clean.size() == 0) {
+            //请检查优化图中，是否有两两重合的边！
+            return null;
         }
 
         /**
@@ -219,43 +232,44 @@ public class NestPath  implements Comparable<NestPath>{
     /**
      * 通过平移将NestPath的最低x坐标，y坐标的值必定都是0，
      */
-    public void Zerolize(){
-        ZeroX();ZeroY();
+    public void Zerolize() {
+        ZeroX();
+        ZeroY();
     }
 
-    private void ZeroX(){
+    private void ZeroX() {
         double xMin = Double.MAX_VALUE;
-        for(Segment s : segments){
-            if(xMin > s.getX() ){
+        for (Segment s : segments) {
+            if (xMin > s.getX()) {
                 xMin = s.getX();
             }
         }
-        for(Segment s :segments ){
-            s.setX(s.getX() - xMin );
+        for (Segment s : segments) {
+            s.setX(s.getX() - xMin);
         }
     }
 
-    private void ZeroY(){
+    private void ZeroY() {
         double yMin = Double.MAX_VALUE;
-        for(Segment s : segments){
-            if(yMin > s.getY() ){
+        for (Segment s : segments) {
+            if (yMin > s.getY()) {
                 yMin = s.getY();
             }
         }
-        for(Segment s : segments ){
+        for (Segment s : segments) {
             s.setY(s.getY() - yMin);
         }
     }
 
-    public void clear(){
+    public void clear() {
         segments.clear();
     }
 
-    public int size(){
+    public int size() {
         return segments.size();
     }
 
-    public void add(Segment s){
+    public void add(Segment s) {
         segments.add(s);
     }
 
@@ -289,31 +303,46 @@ public class NestPath  implements Comparable<NestPath>{
     }
 
     public int compareTo(NestPath o) {
-        double area0  = this.area;
+        double area0 = this.area;
         double area1 = o.area;
-        if(area0 > area1 ){
+        if (area0 > area1) {
             return 1;
-        }
-        else if(area0 == area1){
+        } else if (area0 == area1) {
             return 0;
         }
         return -1;
     }
 
-    public double getMaxY(){
+    public double getMaxY() {
         double MaxY = Double.MIN_VALUE;
-        for(Segment s : segments){
-            if(MaxY < s.getY()){
+        for (Segment s : segments) {
+            if (MaxY < s.getY()) {
                 MaxY = s.getY();
             }
         }
         return MaxY;
     }
 
-    public void translate(double x,  double y ){
-        for(Segment s : segments){
-            s.setX(s.getX() + x );
+    public void translate(double x, double y) {
+        for (Segment s : segments) {
+            s.setX(s.getX() + x);
             s.setY(s.getY() + y);
         }
+    }
+
+    public boolean getIsInline() {
+        return isInline;
+    }
+
+    public void setIsInline(boolean isInline) {
+        this.isInline = isInline;
+    }
+
+    public boolean getIsIncludeArc() {
+        return isIncludeArc;
+    }
+
+    public void setIsIncludeArc(boolean isIncludeArc) {
+        this.isIncludeArc = isIncludeArc;
     }
 }

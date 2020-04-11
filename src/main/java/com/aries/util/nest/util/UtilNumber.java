@@ -243,4 +243,25 @@ public class UtilNumber {
     }
 
 
+
+    public static BigDecimal max(BigDecimal a, BigDecimal b) {
+        if (a.compareTo(b) >= 0)
+            return a;
+        return b;
+    }
+
+    public static BigDecimal min(BigDecimal a, BigDecimal b) {
+        if (a.compareTo(b) <= 0)
+            return a;
+        return b;
+    }
+
+
+    public static boolean isNullOrZero(BigDecimal b) {
+        return b == null || isZero(b);
+    }
+
+    public static boolean isZero(BigDecimal b) {
+        return (b != null && b.compareTo(BigDecimal.ZERO) == 0);
+    }
 }
